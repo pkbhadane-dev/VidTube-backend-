@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { ApiError } from "../utils/ApiError";
 const userSchema = new mongoose.Schema(
   {
     fullname: {
@@ -20,11 +21,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
       required: [true, "Password is required"],
-      unique: true,
     },
     avatar: {
       type: String,
@@ -42,13 +43,17 @@ const userSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps : true},
+  { timestamps: true },
 );
 
 userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return 
-  this.password = await bcrypt.hash(this.password, 10);
+  if (!this.isModified("password")) return;
 
+  try {
+    this.password = await bcrypt.hash(this.password, 10);
+  } catch (error) {
+    throw new ApiError(400, "Password hashing fail");
+  }
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {

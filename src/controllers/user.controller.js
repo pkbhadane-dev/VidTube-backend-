@@ -196,7 +196,7 @@ export const changePassword = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findById(userId);
-  const isPasswordCorrect = user.isPasswordCorrect(oldPassword);
+  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
 
   if (!isPasswordCorrect) {
     throw new ApiError(401, "old-password is incorrect");
@@ -289,7 +289,7 @@ export const updateCoverImage = asyncHandler(async (req, res) => {
 });
 
 export const getChannelProfile = asyncHandler(async (req, res) => {
-  const { username } = req.param;
+  const { username } = req.params;
 
   if (!username) {
     throw new ApiError(400, "username is missing");
@@ -346,7 +346,7 @@ export const getChannelProfile = asyncHandler(async (req, res) => {
     },
   ]);
 
-  if (!channel?.length) {
+  if (!userChannel?.length) {
     throw new ApiError(400, "Channel does not exist");
   }
 
@@ -359,7 +359,7 @@ export const getWatchHistory = asyncHandler(async (req, res) => {
   const user = await User.aggregate([
     {
       $match: {
-        _id: mongoose.Types.ObjectId(req.user?._id),
+        _id: new mongoose.Types.ObjectId(req.user?._id),
       },
     },
     {
