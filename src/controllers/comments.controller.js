@@ -29,9 +29,12 @@ export const addComments = asyncHandler(async (req, res) => {
 });
 
 export const getVideoComments = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
   const { videoId } = req.params;
   const { page = 1, limit = 10, sortBy, sortType } = req.query;
+
+  if (!isValidObjectId(videoId)) {
+    throw new ApiError(400, "Invalid videoId");
+  }
 
   const pipelines = Comment.aggregate([
     {
@@ -42,29 +45,6 @@ export const getVideoComments = asyncHandler(async (req, res) => {
     {
       $sort: {
         [sortBy || "createdAt"]: sortType === "desc" ? -1 : 1,
-      },
-    },
-    {
-      $lookup: {
-        from: "videos",
-        localField: "video",
-        foreignField: "_id",
-        as: "videoDetails",
-        pipeline: [
-          {
-            $project: {
-              title: 1,
-              thumbnail: 1,
-            },
-          },
-        ],
-      },
-    },
-    {
-      $addFields: {
-        video: {
-          $first: "$videoDetails",
-        },
       },
     },
     {
