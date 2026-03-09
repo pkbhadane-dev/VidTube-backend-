@@ -65,11 +65,11 @@ export const getChannelStats = asyncHandler(async (req, res) => {
 
   const stats = {
     totalVideos: totalStats[0]?.allVideos || [],
-    totalVideoViews: totalStats[0]?.videoStats[0].totalViews || 0,
-    totalVideoCount: totalStats[0]?.videoStats[0].totalVideos || 0,
-    totalLike: totalStats[0]?.totalLike[0].totalLikes || 0,
+    totalVideoViews: totalStats[0]?.videoStats[0]?.totalViews || 0,
+    totalVideoCount: totalStats[0]?.videoStats[0]?.totalVideos || 0,
+    totalLike: totalStats[0]?.totalLike[0]?.totalLikes || 0,
     totalSubscribersCount: totalSubscribers || 0,
   };
 
-  return res.status(200).json(ApiResponse(200, stats, "fetched channel stats"));
+  return res.status(200).json( new ApiResponse(200, stats, "fetched channel stats"));
 });

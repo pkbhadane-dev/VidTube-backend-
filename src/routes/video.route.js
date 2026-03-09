@@ -32,3 +32,5 @@ videoRouter
   .get(getVideoById)
   .delete(deleteVideo)
   .patch(upload.single("thumbnail"), updateVideo);
+
+  export default videoRouter
