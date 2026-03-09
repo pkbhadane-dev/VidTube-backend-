@@ -2,6 +2,12 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { json, urlencoded } from "express";
 import userRouter from "./routes/user.route.js";
+import videoRouter from "./routes/video.route.js";
+import subscriptionRoute from "./routes/subscription.route.js";
+import playlistRoute from "./routes/playlist.route.js";
+import likesRoute from "./routes/likes.route.js";
+import dashboardRoute from "./routes/dashboard.route.js";
+import commentRoute from "./routes/comments.route.js";
 
 const app = express();
 
@@ -16,6 +22,12 @@ app.use(json());
 app.use(express.static("public"));
 app.use(urlencoded({ extended: true }));
 
-app.use("/api/v1", userRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/video", videoRouter);
+app.use("/api/v1/subscription", subscriptionRoute);
+app.use("/api/v1/playlist", playlistRoute);
+app.use("/api/v1/likes", likesRoute);
+app.use("/api/v1/dashboard", dashboardRoute);
+app.use("/api/v1/comments", commentRoute);
 
 export default app;
