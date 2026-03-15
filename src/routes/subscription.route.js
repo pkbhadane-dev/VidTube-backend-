@@ -3,8 +3,8 @@ import {
   getSubscribedChannels,
   getUserChannelSubscribers,
   toggleSubscription,
-} from "../controllers/subscription.controller";
-import { verifyJWT } from "../middlewares/auth.middleware";
+} from "../controllers/subscription.controller.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const subscriptionRoute = express.Router();
 

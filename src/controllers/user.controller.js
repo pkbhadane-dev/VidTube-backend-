@@ -64,12 +64,22 @@ export const userRegister = asyncHandler(async (req, res) => {
     coverImage: coverImage?.url || "",
   });
 
+  const { refreshToken, accessToken } =
+    generateAccessTokenAndRefreshToken(user);
+
   const filteredUserData = await User.findById(user._id).select(
     "-password -refreshToken",
   );
 
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
   return res
     .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
     .json(
       new ApiResponse(201, filteredUserData, "user registered successfully"),
     );

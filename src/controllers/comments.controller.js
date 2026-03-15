@@ -1,9 +1,9 @@
 import mongoose, { isValidObjectId } from "mongoose";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
-import { Comment } from "../models/comments.model";
-import { ApiResponse } from "../utils/ApiResponse";
-import { Video } from "../models/video.model";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { Comment } from "../models/comments.model.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+
 
 export const addComments = asyncHandler(async (req, res) => {
   const { comment } = req.body;

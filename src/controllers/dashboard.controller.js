@@ -1,9 +1,9 @@
 import mongoose, { isValidObjectId } from "mongoose";
-import { Video } from "../models/video.model";
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiResponse } from "../utils/ApiResponse";
-import { ApiError } from "../utils/ApiError";
-import { Subscription } from "../models/subscription.model";
+import { Video } from "../models/video.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { ApiError } from "../utils/ApiError.js";
+import { Subscription } from "../models/subscription.model.js";
 
 export const getChannelStats = asyncHandler(async (req, res) => {
   const channelId = req.user._id;

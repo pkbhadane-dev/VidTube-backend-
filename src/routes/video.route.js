@@ -1,13 +1,13 @@
 import express from "express";
-import { verifyJWT } from "../middlewares/auth.middleware";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 import {
   deleteVideo,
   getAllVideos,
   getVideoById,
   updateVideo,
   uploadVideo,
-} from "../controllers/video.controller";
-import { upload } from "../middlewares/multer.middleware";
+} from "../controllers/video.controller.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const videoRouter = express.Router();
 
