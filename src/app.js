@@ -18,7 +18,7 @@ app.use(
   }),
 );
 app.use(cookieParser());
-app.use(json());
+app.use(express.json());
 app.use(express.static("public"));
 app.use(urlencoded({ extended: true }));
 

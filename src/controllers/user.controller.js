@@ -64,8 +64,12 @@ export const userRegister = asyncHandler(async (req, res) => {
     coverImage: coverImage?.url || "",
   });
 
-  const { refreshToken, accessToken } =
+  const { refreshToken, accessToken } = await
     generateAccessTokenAndRefreshToken(user);
+
+    console.log("refreshToken", refreshToken);
+    console.log("accessToken", accessToken);
+    
 
   const filteredUserData = await User.findById(user._id).select(
     "-password -refreshToken",
@@ -74,6 +78,7 @@ export const userRegister = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "None"
   };
 
   return res
@@ -86,7 +91,7 @@ export const userRegister = asyncHandler(async (req, res) => {
 });
 
 export const userLogin = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, username , password } = req.body;
 
   // validation pending
 
@@ -127,7 +132,7 @@ export const userLogin = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { user: loggedInUser, accessToken, refreshToken },
+         loggedInUser ,
         "User successfuly login",
       ),
     );
