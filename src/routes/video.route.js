@@ -18,7 +18,7 @@ videoRouter
   .get(getAllVideos)
   .post(
     upload.fields([
-      { name: "video", maxCount: 1 },
+      { name: "videoFile", maxCount: 1 },
       {
         name: "thumbnail",
         maxCount: 1,
