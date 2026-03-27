@@ -11,7 +11,7 @@ const subscriptionRoute = express.Router();
 subscriptionRoute.use(verifyJWT);
 
 subscriptionRoute
-  .route("/c/:channelId")
+  .route("/:channelId")
   .post(toggleSubscription)
   .get(getUserChannelSubscribers);
 

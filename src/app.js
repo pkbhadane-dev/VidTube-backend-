@@ -8,6 +8,7 @@ import playlistRoute from "./routes/playlist.route.js";
 import likesRoute from "./routes/likes.route.js";
 import dashboardRoute from "./routes/dashboard.route.js";
 import commentRoute from "./routes/comments.route.js";
+import { catchError } from "./middlewares/errorHandling.middleware.js";
 
 const app = express();
 
@@ -29,5 +30,7 @@ app.use("/api/v1/playlist", playlistRoute);
 app.use("/api/v1/likes", likesRoute);
 app.use("/api/v1/dashboard", dashboardRoute);
 app.use("/api/v1/comments", commentRoute);
+
+app.use(catchError)
 
 export default app;

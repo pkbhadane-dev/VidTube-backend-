@@ -17,13 +17,6 @@ export const getChannelStats = asyncHandler(async (req, res) => {
       },
       {
         $facet: {
-          allVideos: [
-            {
-              $sort: {
-                createdAt: -1,
-              },
-            },
-          ],
           videoStats: [
             {
               $group: {
@@ -71,5 +64,49 @@ export const getChannelStats = asyncHandler(async (req, res) => {
     totalSubscribersCount: totalSubscribers || 0,
   };
 
-  return res.status(200).json( new ApiResponse(200, stats, "fetched channel stats"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, stats, "fetched channel stats"));
+});
+
+export const getChannelVideos = asyncHandler(async (req, res) => {
+  const channelId = req.user._id;
+
+  const userVideos = await Video.aggregate([
+    {
+      $match: {
+        owner: new mongoose.Types.ObjectId(channelId),
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+        pipeline: [
+          {
+            $project: {
+              fullname: 1,
+              username: 1,
+              avatar: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        owner: {
+          $first: "$owner",
+        },
+      },
+    },
+
+    
+  ]);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, userVideos, "user videos fetched"));
 });

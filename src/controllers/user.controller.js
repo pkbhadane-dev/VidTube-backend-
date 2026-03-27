@@ -64,12 +64,11 @@ export const userRegister = asyncHandler(async (req, res) => {
     coverImage: coverImage?.url || "",
   });
 
-  const { refreshToken, accessToken } = await
-    generateAccessTokenAndRefreshToken(user);
+  const { refreshToken, accessToken } =
+    await generateAccessTokenAndRefreshToken(user);
 
-    console.log("refreshToken", refreshToken);
-    console.log("accessToken", accessToken);
-    
+  console.log("refreshToken", refreshToken);
+  console.log("accessToken", accessToken);
 
   const filteredUserData = await User.findById(user._id).select(
     "-password -refreshToken",
@@ -78,7 +77,7 @@ export const userRegister = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: "None"
+    sameSite: "None",
   };
 
   return res
@@ -91,7 +90,7 @@ export const userRegister = asyncHandler(async (req, res) => {
 });
 
 export const userLogin = asyncHandler(async (req, res) => {
-  const { email, username , password } = req.body;
+  const { email, username, password } = req.body;
 
   // validation pending
 
@@ -120,19 +119,28 @@ export const userLogin = asyncHandler(async (req, res) => {
     "-password -refreshToken",
   );
 
-  const options = {
+  const accessTokenOptions = {
     httpOnly: true,
     secure: true,
+    sameSite: "None",
+    maxAge: 1 * 24 * 60 * 60 * 1000,
+  };
+
+  const refreshTokenOption = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 10 * 24 * 60 * 60 * 1000,
   };
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, accessTokenOptions)
+    .cookie("refreshToken", refreshToken, refreshTokenOption)
     .json(
       new ApiResponse(
         200,
-         loggedInUser ,
+        { user: loggedInUser, accessToken, refreshToken },
         "User successfuly login",
       ),
     );
@@ -305,6 +313,7 @@ export const updateCoverImage = asyncHandler(async (req, res) => {
 
 export const getChannelProfile = asyncHandler(async (req, res) => {
   const { username } = req.params;
+  console.log(req.user?._id);
 
   if (!username) {
     throw new ApiError(400, "username is missing");
@@ -340,7 +349,12 @@ export const getChannelProfile = asyncHandler(async (req, res) => {
         },
         isSubscribed: {
           $cond: {
-            if: { $in: [req.user?._id, "$subscribers.subscriber"] },
+            if: {
+              $in: [
+                new mongoose.Types.ObjectId(req.user?._id),
+                "$subscribers.subscriber",
+              ],
+            },
             then: true,
             else: false,
           },

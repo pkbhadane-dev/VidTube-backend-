@@ -20,16 +20,18 @@ export const toggleSubscription = asyncHandler(async (req, res) => {
 
   if (isExist) {
     await Subscription.findByIdAndDelete(isExist._id);
+    return res
+      .status(200)
+      .json(new ApiResponse(200, null, "channel Unsubscribed"));
   } else {
     subscription = await Subscription.create({
       subscriber: userId,
       channel: channelId,
     });
+    return res
+      .status(200)
+      .json(new ApiResponse(200, subscription, "Channel Subscribed"));
   }
-
-  return res
-    .status(200)
-    .json(ApiResponse(200, subscription, "Channel Subscribed"));
 });
 
 export const getUserChannelSubscribers = asyncHandler(async (req, res) => {
@@ -54,7 +56,7 @@ export const getUserChannelSubscribers = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      ApiResponse(
+      new ApiResponse(
         200,
         { subscribers_count: count },
         "UserChannelSubscribers fetched successfully",
@@ -104,7 +106,7 @@ export const getSubscribedChannels = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      ApiResponse(
+      new ApiResponse(
         200,
         Array.isArray(subscribedChannels) ? subscribedChannels : [],
         "subscribedChannels fetched successfully",
