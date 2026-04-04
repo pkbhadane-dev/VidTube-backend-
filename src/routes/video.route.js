@@ -11,26 +11,25 @@ import { upload } from "../middlewares/multer.middleware.js";
 
 const videoRouter = express.Router();
 
+videoRouter.route("/").get(getAllVideos);
+videoRouter.route("/:videoId").get(getVideoById);
+
 videoRouter.use(verifyJWT);
 
-videoRouter
-  .route("/")
-  .get(getAllVideos)
-  .post(
-    upload.fields([
-      { name: "videoFile", maxCount: 1 },
-      {
-        name: "thumbnail",
-        maxCount: 1,
-      },
-    ]),
-    uploadVideo,
-  );
+videoRouter.route("/").post(
+  upload.fields([
+    { name: "videoFile", maxCount: 1 },
+    {
+      name: "thumbnail",
+      maxCount: 1,
+    },
+  ]),
+  uploadVideo,
+);
 
 videoRouter
   .route("/:videoId")
-  .get(getVideoById)
   .delete(deleteVideo)
   .patch(upload.single("thumbnail"), updateVideo);
 
-  export default videoRouter
+export default videoRouter;

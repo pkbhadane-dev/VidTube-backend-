@@ -12,14 +12,24 @@ export const videoLike = asyncHandler(async (req, res) => {
     throw new ApiError(400, "invalid videoId");
   }
 
-  const videoLikes = await Like.create({
+  const isExist = await Like.findOne({
     video: videoId,
     likedBy: userId,
   });
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, videoLikes, "video liked successfully"));
+  if (isExist) {
+    await Like.findByIdAndDelete(isExist._id);
+    return res.status(200).json(new ApiResponse(200, null, "Video Unlike"));
+  } else {
+    const videoLikes = await Like.create({
+      video: videoId,
+      likedBy: userId,
+    });
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, videoLikes, "video liked successfully"));
+  }
 });
 
 export const commentLike = asyncHandler(async (req, res) => {

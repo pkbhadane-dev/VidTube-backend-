@@ -10,8 +10,8 @@ const likesRoute = express.Router();
 
 likesRoute.use(verifyJWT);
 
-likesRoute.route("/v/:videoId").post(videoLike);
-likesRoute.route("/c/:commentId").post(commentLike);
+likesRoute.route("/:videoId").post(videoLike);
+likesRoute.route("/:commentId").post(commentLike);
 
 likesRoute.route("/videos").get(getLikedVideos);
 

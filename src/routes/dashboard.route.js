@@ -7,6 +7,6 @@ const dashboardRoute = express.Router();
 dashboardRoute.use(verifyJWT);
 
 dashboardRoute.route("/stats").get(getChannelStats);
-dashboardRoute.route("/user-videos").get(getChannelVideos)
+dashboardRoute.route("/user-videos/:username").get(getChannelVideos)
 
 export default dashboardRoute

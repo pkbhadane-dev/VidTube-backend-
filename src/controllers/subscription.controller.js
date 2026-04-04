@@ -36,6 +36,7 @@ export const toggleSubscription = asyncHandler(async (req, res) => {
 
 export const getUserChannelSubscribers = asyncHandler(async (req, res) => {
   const { channelId } = req.params;
+  // const channelId = req.user?._id
 
   if (!isValidObjectId(channelId)) {
     throw new ApiError(400, "Invalid channelId");
@@ -50,7 +51,7 @@ export const getUserChannelSubscribers = asyncHandler(async (req, res) => {
     {
       $count: "subscribers_count",
     },
-  ]);
+  ]);  // check this controller is used or not.
 
   const count = subscribers.length > 0 ? subscribers[0].subscribers_count : 0;
   return res
@@ -65,7 +66,8 @@ export const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 });
 
 export const getSubscribedChannels = asyncHandler(async (req, res) => {
-  const { subscriberId } = req.params;
+  const subscriberId  = req.user?._id
+  
 
   if (!isValidObjectId(subscriberId)) {
     throw new ApiError(400, "Invalid subscriberId");
@@ -96,7 +98,7 @@ export const getSubscribedChannels = asyncHandler(async (req, res) => {
     },
     {
       $addFields: {
-        channelDetail: {
+        channel: {
           $first: "$channel",
         },
       },

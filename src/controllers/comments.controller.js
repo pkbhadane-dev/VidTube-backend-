@@ -8,7 +8,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 export const addComments = asyncHandler(async (req, res) => {
   const { comment } = req.body;
   const { videoId } = req.params;
-  const userId = req.user._id;
+  const userId = req.user?._id;
+
+  console.log(comment, videoId);
+  
 
   if (!comment) {
     throw new ApiError(400, "comment is required");
@@ -66,7 +69,7 @@ export const getVideoComments = asyncHandler(async (req, res) => {
     },
     {
       $addFields: {
-        owner: {
+        ownerDetails: {
           $first: "$ownerDetails",
         },
       },

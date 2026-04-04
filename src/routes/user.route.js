@@ -13,6 +13,7 @@ import {
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { getOptionalUser } from "../middlewares/optionalUser.middleware.js";
 
 const userRouter = express.Router();
 
@@ -42,7 +43,7 @@ userRouter
   .patch(verifyJWT, upload.single("coverImage"), updateCoverImage);
 userRouter
   .route("/channel-profile/:username")
-  .get(verifyJWT, getChannelProfile);
+  .get(getOptionalUser, getChannelProfile);
 userRouter.route("/watch-history").get(verifyJWT, getWatchHistory);
 
 // router.post("/register", userRegister) // common and simple syntax

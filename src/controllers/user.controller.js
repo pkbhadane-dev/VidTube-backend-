@@ -67,9 +67,6 @@ export const userRegister = asyncHandler(async (req, res) => {
   const { refreshToken, accessToken } =
     await generateAccessTokenAndRefreshToken(user);
 
-  console.log("refreshToken", refreshToken);
-  console.log("accessToken", accessToken);
-
   const filteredUserData = await User.findById(user._id).select(
     "-password -refreshToken",
   );
@@ -313,7 +310,7 @@ export const updateCoverImage = asyncHandler(async (req, res) => {
 
 export const getChannelProfile = asyncHandler(async (req, res) => {
   const { username } = req.params;
-  console.log(req.user?._id);
+ 
 
   if (!username) {
     throw new ApiError(400, "username is missing");

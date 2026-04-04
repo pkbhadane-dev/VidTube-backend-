@@ -185,9 +185,11 @@ export const getVideoById = asyncHandler(async (req, res) => {
         },
         isLiked: {
           $cond: {
-            if: {
-              $in: [new mongoose.Types.ObjectId(userId), "$likes.likedBy"],
-            },
+            if: userId
+              ? {
+                  $in: [new mongoose.Types.ObjectId(userId), "$likes.likedBy"],
+                }
+              : false,
             then: true,
             else: false,
           },
@@ -233,7 +235,6 @@ export const updateVideo = asyncHandler(async (req, res) => {
   };
 
   let thumbnail;
-  console.log("req.file", req.file?.path);
 
   if (req.file && req.file?.path) {
     // const localThumbnailPath = req.file?.path;
@@ -251,7 +252,6 @@ export const updateVideo = asyncHandler(async (req, res) => {
   }
 
   const imagePublicId = getPublicId(video.thumbnail);
-  console.log("imagePublicId", imagePublicId);
 
   await deleteOnCloudinary(imagePublicId, "image");
 
@@ -295,9 +295,6 @@ export const deleteVideo = asyncHandler(async (req, res) => {
 
   const videoPublicId = getPublicId(video.videoFile);
   const imagePublicId = getPublicId(video.thumbnail);
-
-  console.log("videoPublicId", videoPublicId);
-  console.log("imagePublicId", imagePublicId);
 
   await deleteOnCloudinary(videoPublicId, "video");
   await deleteOnCloudinary(imagePublicId, "image");

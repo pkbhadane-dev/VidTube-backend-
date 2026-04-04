@@ -4,6 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Subscription } from "../models/subscription.model.js";
+import { User } from "../models/user.model.js";
 
 export const getChannelStats = asyncHandler(async (req, res) => {
   const channelId = req.user._id;
@@ -70,12 +71,14 @@ export const getChannelStats = asyncHandler(async (req, res) => {
 });
 
 export const getChannelVideos = asyncHandler(async (req, res) => {
-  const channelId = req.user._id;
+  const {username} = req.params 
+
+  const user = await User.findOne({username})
 
   const userVideos = await Video.aggregate([
     {
       $match: {
-        owner: new mongoose.Types.ObjectId(channelId),
+        owner: new mongoose.Types.ObjectId(user?._id),
       },
     },
     {
