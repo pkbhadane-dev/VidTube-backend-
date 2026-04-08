@@ -14,7 +14,7 @@ const playlistRoute = express.Router();
 
 playlistRoute.use(verifyJWT);
 
-playlistRoute.route("/").post(createPlaylist);
+playlistRoute.route("/:videoId").post(createPlaylist);
 
 playlistRoute.route("/add/:playlistId/:videoId").patch(addVideoToPlaylist);
 playlistRoute

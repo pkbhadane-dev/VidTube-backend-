@@ -8,11 +8,12 @@ import {
   uploadVideo,
 } from "../controllers/video.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
+import { getOptionalUser } from "../middlewares/optionalUser.middleware.js";
 
 const videoRouter = express.Router();
 
-videoRouter.route("/").get(getAllVideos);
-videoRouter.route("/:videoId").get(getVideoById);
+videoRouter.route("/").get(getOptionalUser, getAllVideos);
+videoRouter.route("/:videoId").get(getOptionalUser, getVideoById);
 
 videoRouter.use(verifyJWT);
 

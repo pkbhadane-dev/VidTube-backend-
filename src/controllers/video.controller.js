@@ -135,6 +135,7 @@ export const uploadVideo = asyncHandler(async (req, res) => {
 export const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
   const userId = req.user?._id;
+console.log(userId);
 
   if (!isValidObjectId(videoId)) {
     throw new ApiError(400, "VideoId is required");

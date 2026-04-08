@@ -6,7 +6,11 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const createPlaylist = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
+  const {videoId} = req.params
   const userId = req.user?._id;
+
+  console.log(req.body, videoId);
+  
 
   if (!title) {
     throw new ApiError(400, "Title is required for playlist");
@@ -16,6 +20,7 @@ export const createPlaylist = asyncHandler(async (req, res) => {
     title,
     description,
     owner: userId,
+    videos: videoId
   });
 
   return res
@@ -25,6 +30,8 @@ export const createPlaylist = asyncHandler(async (req, res) => {
 
 export const addVideoToPlaylist = asyncHandler(async (req, res) => {
   const { playlistId, videoId } = req.params;
+  console.log(playlistId, videoId);
+  
 
   if (!isValidObjectId(playlistId) || !isValidObjectId(videoId)) {
     throw new ApiError(400, "playlist & video Id are required");
@@ -34,7 +41,7 @@ export const addVideoToPlaylist = asyncHandler(async (req, res) => {
     playlistId,
     {
       $push: {
-        video: videoId,
+        videos: videoId,
       },
     },
     {
@@ -65,7 +72,7 @@ export const getPlaylistById = asyncHandler(async (req, res) => {
     {
       $lookup: {
         from: "videos",
-        localField: "video",
+        localField: "videos",
         foreignField: "_id",
         as: "playlistVideo",
         pipeline: [
@@ -113,14 +120,14 @@ export const getUserPlaylists = asyncHandler(async (req, res) => {
   const userPlaylists = await Playlist.aggregate([
     {
       $match: {
-        owner: new mongoose.Schema.Types.ObjectId(userId),
+        owner: new mongoose.Types.ObjectId(userId),
       },
     },
     {
       $lookup: {
         from: "videos",
         foreignField: "_id",
-        localField: "video",
+        localField: "videos",
         as: "videoDetails",
         pipeline: [
           {
@@ -149,7 +156,7 @@ export const getUserPlaylists = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        userPlaylists[0],
+        userPlaylists,
         "All playlists fetched successfully",
       ),
     );
