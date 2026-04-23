@@ -6,11 +6,9 @@ export const getOptionalUser = asyncHandler(async (req, res, next) => {
     const token =
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
-console.log("token", token);
 
     if (!token) {
       req.user = null;
-      console.log("user", req.user);
       return next();
     }
 

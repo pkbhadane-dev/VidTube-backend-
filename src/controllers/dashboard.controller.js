@@ -8,8 +8,6 @@ import { User } from "../models/user.model.js";
 
 export const getChannelStats = asyncHandler(async (req, res) => {
   const channelId = req.user?._id;
-  console.log("userId" ,channelId);
-  
 
   const [totalStats, totalSubscribers] = await Promise.all([
     Video.aggregate([
@@ -58,17 +56,13 @@ export const getChannelStats = asyncHandler(async (req, res) => {
 
     Subscription.countDocuments({ channel: channelId }),
   ]);
-// console.log(totalStats[0]);
 
   const stats = {
     totalVideoViews: totalStats[0]?.videoStats[0]?.totalViews || 0,
     totalVideoCount: totalStats[0]?.videoStats[0]?.totalVideos || 0,
     totalLike: totalStats[0]?.totalLike[0]?.totalLikes || 0,
     totalSubscribersCount: totalSubscribers || 0,
-  };
-
-  console.log(stats);
-  
+  };  
 
   return res
     .status(200)

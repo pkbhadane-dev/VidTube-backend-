@@ -14,6 +14,11 @@ import {
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { getOptionalUser } from "../middlewares/optionalUser.middleware.js";
+import {
+  loginValidation,
+  registerValidation,
+} from "../validators/authValidator.js";
+import { validate } from "../middlewares/validate.middleware.js";
 
 const userRouter = express.Router();
 
@@ -25,10 +30,12 @@ userRouter.route("/register").post(
       maxCount: 1,
     },
   ]),
+  registerValidation,
+  validate,
   userRegister,
 ); // using this syntax we can use multiple methods i.e-put,get etc. for same path
 
-userRouter.route("/login").post(userLogin);
+userRouter.route("/login").post(loginValidation, validate, userLogin);
 userRouter.route("/refresh").post(refreshAccessToken);
 
 // secured routes

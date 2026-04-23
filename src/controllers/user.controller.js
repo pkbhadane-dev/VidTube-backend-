@@ -5,6 +5,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { registerValidation } from "../validators/authValidator.js";
+import { validate } from "../middlewares/validate.middleware.js";
 
 const generateAccessTokenAndRefreshToken = async (user) => {
   try {
@@ -23,7 +25,9 @@ const generateAccessTokenAndRefreshToken = async (user) => {
 export const userRegister = asyncHandler(async (req, res) => {
   const { username, fullname, email, password } = req.body;
 
-  // validation pending //
+  if (!username || !fullname || !email || !password) {
+    throw new ApiError(400, "All fields are required");
+  }
 
   const existedUser = await User.findOne({
     $or: [{ email }, { username }],
@@ -88,8 +92,6 @@ export const userRegister = asyncHandler(async (req, res) => {
 
 export const userLogin = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
-
-  // validation pending
 
   if (!(username || email) || !password) {
     throw new ApiError(401, "All credentials are required");
@@ -310,7 +312,6 @@ export const updateCoverImage = asyncHandler(async (req, res) => {
 
 export const getChannelProfile = asyncHandler(async (req, res) => {
   const { username } = req.params;
- 
 
   if (!username) {
     throw new ApiError(400, "username is missing");

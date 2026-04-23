@@ -8,8 +8,6 @@ export const createPlaylist = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
   const {videoId} = req.params
   const userId = req.user?._id;
-
-  console.log(req.body, videoId);
   
 
   if (!title) {
@@ -30,7 +28,6 @@ export const createPlaylist = asyncHandler(async (req, res) => {
 
 export const addVideoToPlaylist = asyncHandler(async (req, res) => {
   const { playlistId, videoId } = req.params;
-  console.log(playlistId, videoId);
   
 
   if (!isValidObjectId(playlistId) || !isValidObjectId(videoId)) {

@@ -97,7 +97,7 @@ export const uploadVideo = asyncHandler(async (req, res) => {
     if (!video) throw new ApiError(401, "Video upload failed");
   } catch (error) {
     await deleteOnCloudinary(thumbnail?.public_id);
-    console.log("file delete");
+  
   }
 
   if (!video || !thumbnail) {
@@ -135,7 +135,6 @@ export const uploadVideo = asyncHandler(async (req, res) => {
 export const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
   const userId = req.user?._id;
-console.log(userId);
 
   if (!isValidObjectId(videoId)) {
     throw new ApiError(400, "VideoId is required");

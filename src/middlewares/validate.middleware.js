@@ -1,0 +1,14 @@
+import { validationResult } from "express-validator";
+import { ApiError } from "../utils/ApiError.js";
+
+export const validate = (req, res, next) => {
+  const errors = validationResult(req);
+  // console.log(errors.array());
+
+  if (!errors.isEmpty()) {
+    return next(
+      new ApiError(400, "Validation Error", "", errors.array()),
+    );
+  }
+  next();
+};

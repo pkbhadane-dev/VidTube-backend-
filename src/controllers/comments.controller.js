@@ -10,7 +10,6 @@ export const addComments = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
   const userId = req.user?._id;
 
-  console.log(comment, videoId);
   
 
   if (!comment) {
