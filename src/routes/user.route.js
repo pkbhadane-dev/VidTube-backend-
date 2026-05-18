@@ -6,7 +6,6 @@ import {
   refreshAccessToken,
   updateAccountDetails,
   updateAvatar,
-  updateCoverImage,
   userLogin,
   userLogout,
   userRegister,
@@ -45,9 +44,9 @@ userRouter.route("/update-account").patch(verifyJWT, updateAccountDetails);
 userRouter
   .route("/avatar")
   .patch(verifyJWT, upload.single("avatar"), updateAvatar);
-userRouter
-  .route("/coverImage")
-  .patch(verifyJWT, upload.single("coverImage"), updateCoverImage);
+// userRouter
+//   .route("/coverImage")
+//   .patch(verifyJWT, upload.single("coverImage"), updateCoverImage);
 userRouter
   .route("/channel-profile/:username")
   .get(getOptionalUser, getChannelProfile);
