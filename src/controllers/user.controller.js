@@ -366,7 +366,7 @@ export const getChannelProfile = asyncHandler(async (req, res) => {
         email: 1,
         username: 1,
         avatar: 1,
-        coverImage: 1,
+        description: 1,
         subscribersCount: 1,
         subscribedChannelCount: 1,
         isSubscribed: 1,
