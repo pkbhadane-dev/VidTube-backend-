@@ -110,8 +110,8 @@ export const uploadVideo = asyncHandler(async (req, res) => {
   const uploadVideo = await Video.create({
     title,
     description,
-    videoFile: video.url,
-    thumbnail: thumbnail.url,
+    videoFile: video.secure_url,
+    thumbnail: thumbnail.secure_url,
     owner: userId,
     duration: video.duration,
   });
@@ -261,7 +261,7 @@ export const updateVideo = asyncHandler(async (req, res) => {
       $set: {
         title,
         description,
-        thumbnail: thumbnail?.url,
+        thumbnail: thumbnail?.secure_url,
       },
     },
     { new: true },
