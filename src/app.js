@@ -14,7 +14,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -31,6 +31,6 @@ app.use("/api/v1/likes", likesRoute);
 app.use("/api/v1/dashboard", dashboardRoute);
 app.use("/api/v1/comments", commentRoute);
 
-app.use(catchError)
+app.use(catchError);
 
 export default app;
