@@ -12,12 +12,28 @@ import { catchError } from "./middlewares/errorHandling.middleware.js";
 
 const app = express();
 
+const allowedOrigin = [process.env.CORS_ORIGIN , "http://localhost:5173"];
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
-    credentials: true,
-  }),
-);
+  origin:function(origin, callback){
+    if(!origin || allowedOrigin.indexOf(origin) !== -1){
+      callback(null, true)
+    }else{
+      callback(new Error("Not allowed by CORS"))
+    }
+  },
+  credentials: true,
+}))
+
+// app.use(
+//   cors({
+//     origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+//     credentials: true,
+//   }),
+// );
+
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.static("public"));
